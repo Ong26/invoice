@@ -1,0 +1,162 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model InvoiceLineItem {
+  id             String  @id @default(cuid())
+  invoiceId      String
+  invoice        Invoice @relation(fields: [invoiceId], references: [id])
+  classification String?
+  description    String
+  quantity       Float
+  unitPrice      Float
+  measurement    String?
+  discount       Float?
+  discountRate   Float?
+  isDeleted      Boolean @default(false)
+}
+
+model Invoice {
+  id            String            @id @default(cuid())
+  LHDNInvoiceNo String?           @unique
+  title         String?
+  date          DateTime
+  time          String?
+  paymentTerms  String?
+  buyerId       String?
+  buyer         Buyer?            @relation(fields: [buyerId], references: [id])
+  currency      String?
+  status        String?           @default("0")
+  items         InvoiceLineItem[]
+  isDeleted     Boolean           @default(false)
+  createdAt     DateTime?         @default(now())
+  updatedAt     DateTime?         @updatedAt
+  createdById   String?
+  createdBy     User?             @relation("CreatedByRelation", fields: [createdById], references: [id])
+  updatedById   String?
+  updatedBy     User?             @relation("UpdatedByRelation", fields: [updatedById], references: [id])
+}
+
+model BuyerAddress {
+  line1      String
+  line2      String?
+  line3      String?
+  postalZone String?
+  city       String?
+  state      String
+  country    String
+  buyerId    String  @unique
+  buyer      Buyer   @relation(fields: [buyerId], references: [id])
+}
+
+model BuyerContactNumber {
+  buyerId     String @unique
+  buyer       Buyer  @relation(fields: [buyerId], references: [id])
+  countryCode String
+  number      String
+
+  @@index([buyerId])
+}
+
+model Buyer {
+  id            String              @id @default(cuid())
+  name          String
+  TIN           String
+  BRN           String?
+  myKadNo       String?
+  armyNo        String?
+  passportNo    String?
+  SST           String?
+  email         String              @unique
+  validateTINBy String?
+  contactNumber BuyerContactNumber?
+  address       BuyerAddress?
+  invoices      Invoice[]
+  createdById   String?
+  createdBy     User?               @relation("CreatedByRelation", fields: [createdById], references: [id])
+  updatedById   String?
+  updatedBy     User?               @relation("UpdatedByRelation", fields: [updatedById], references: [id])
+  createdAt     DateTime?           @default(now())
+  updatedAt     DateTime?           @updatedAt
+}
+
+model SupplierAddress {
+  line1      String
+  line2      String?
+  line3      String?
+  postalZone String?
+  city       String?
+  state      String
+  country    String
+  supplierId String   @unique
+  supplier   Supplier @relation(fields: [supplierId], references: [id])
+
+  @@index([supplierId])
+}
+
+model SupplierContactNumber {
+  supplierId  String   @unique
+  supplier    Supplier @relation(fields: [supplierId], references: [id])
+  countryCode String
+  number      String
+
+  @@index([supplierId])
+}
+
+model Supplier {
+  id                          String                 @id @default(cuid())
+  name                        String
+  TIN                         String
+  BRN                         String?
+  myKadNo                     String?
+  armyNo                      String?
+  passportNo                  String?
+  SST                         String?
+  email                       String
+  validateTINBy               String?
+  contactNumber               SupplierContactNumber?
+  address                     SupplierAddress?
+  setting                     SupplierSetting?
+  tourismTaxNo                String?
+  MSICCode                    String?
+  businessActivityDescription String?
+  createdAt                   DateTime               @default(now())
+  updatedAt                   DateTime               @updatedAt
+}
+
+model SupplierSetting {
+  id         String   @id @default(cuid())
+  supplierId String   @unique
+  supplier   Supplier @relation(fields: [supplierId], references: [id])
+  setting    Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model User {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  password       String
+  firstName      String?
+  lastName       String?
+  username       String?   @unique
+  role           String
+  isDeleted      Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  buyerCreated   Buyer[]   @relation("CreatedByRelation")
+  buyerUpdated   Buyer[]   @relation("UpdatedByRelation")
+  invoiceCreated Invoice[] @relation("CreatedByRelation")
+  invoiceUpdated Invoice[] @relation("UpdatedByRelation")
+}
+
+model Role {
+  id   String @id @default(cuid())
+  name String @unique
+}
