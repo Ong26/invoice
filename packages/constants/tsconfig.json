@@ -1,0 +1,12 @@
+{
+	"extends": "@invoice/typescript-config/base.json",
+	"include": ["src"],
+	"exclude": ["dist", "build", "node_modules"],
+	"compilerOptions": {
+		"allowImportingTsExtensions": false,
+		"noEmit": false,
+		"sourceMap": false,
+		"outDir": "dist",
+		"rootDir": "src"
+	}
+}

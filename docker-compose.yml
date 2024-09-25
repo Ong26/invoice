@@ -1,0 +1,17 @@
+services:
+  invoice-db:
+    image: postgres:16.3
+    restart: always
+    container_name: invoice-db
+    environment:
+      POSTGRES_DB: invoice-local-db
+      POSTGRES_USER: invoice-local-super-admin
+      POSTGRES_PASSWORD: invoice-local-pw
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+volumes:
+  postgres-volume:
+    external: false

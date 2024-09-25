@@ -1,0 +1,28 @@
+{
+	"name": "@invoice/types",
+	"version": "1.0.0",
+	"exports": {
+		"./*": {
+			"types": "./src/*.d.ts",
+			"require": "./src/*.js",
+			"import": "./src/*.js",
+			"default": "./src/*.js"
+		},
+		"./dist/*": {
+			"types": "./dist/*.d.ts",
+			"require": "./dist/*.js",
+			"import": "./dist/*.js",
+			"default": "./dist/*.js"
+		}
+	},
+	"devDependencies": {
+		"@types/bun": "latest"
+	},
+	"peerDependencies": {
+		"typescript": "^5.0.0"
+	},
+	"scripts": {
+		"dev": "tsc --watch",
+		"build": "tsc"
+	}
+}

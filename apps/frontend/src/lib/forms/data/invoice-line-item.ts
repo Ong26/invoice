@@ -1,0 +1,15 @@
+export const EmptyInvoiceLineItem = {
+	id: "",
+	classification: "030",
+	description: "",
+	unitPrice: 0,
+	taxType: "06",
+	taxRate: 0,
+	taxAmount: 0,
+	taxExemptionDetails: "",
+	amountExemptedFromTax: 0,
+	subtotal: 0,
+	totalExcludingTax: 0,
+	quantity: 0,
+	discountRate: 0,
+};

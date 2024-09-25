@@ -1,0 +1,31 @@
+{
+	"name": "@invoice/constants",
+	"version": "1.0.0",
+	"scripts": {
+		"build": "tsc",
+		"dev": "tsc -w"
+	},
+	"exports": {
+		"./*": {
+			"types": "./src/*.d.ts",
+			"require": "./src/*.js",
+			"import": "./src/*.js",
+			"default": "./src/*.js"
+		},
+		"./dist/*": {
+			"types": "./dist/*.d.ts",
+			"require": "./dist/*.js",
+			"import": "./dist/*.js",
+			"default": "./dist/*.js"
+		}
+	},
+	"peerDependencies": {
+		"typescript": "^5.0.0"
+	},
+	"dependencies": {
+		"country-codes-list": "^1.6.11"
+	},
+	"devDependencies": {
+		"@types/bun": "latest"
+	}
+}
